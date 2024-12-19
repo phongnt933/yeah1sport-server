@@ -1,6 +1,6 @@
-import { User } from '../models';
-import { IBaseUser, IUserDoc, IUserQuery } from '../@types';
-import { parseFilters } from '../utils';
+import { User } from "../models";
+import { IBaseUser, IUserDoc, IUserQuery } from "../@types";
+import { parseFilters } from "../utils";
 
 const createUser = async (user: IBaseUser): Promise<IUserDoc> => {
   const newUser = new User({ ...user });
@@ -8,17 +8,17 @@ const createUser = async (user: IBaseUser): Promise<IUserDoc> => {
 };
 
 const getUser = async (value: any): Promise<IUserDoc | null> => {
-  const user = await User.findOne(value).lean().select('-_id');
+  const user = await User.findOne(value).lean().select("-_id");
   return user;
 };
 
 const getListUsers = async (
-  query: IUserQuery,
+  query: IUserQuery
 ): Promise<{ data: IUserDoc[]; total: number }> => {
   const { page = 1, record = 15, ...rest } = query;
   const parsedFilters = parseFilters(rest);
 
-  if (typeof Number(page) !== 'number' || typeof Number(record) !== 'number') {
+  if (typeof Number(page) !== "number" || typeof Number(record) !== "number") {
     return { data: [], total: 0 };
   }
 
@@ -32,7 +32,7 @@ const getListUsers = async (
           { $limit: Number(record) },
           { $project: { password: false, _id: false } },
         ],
-        totalCount: [{ $count: 'count' }],
+        totalCount: [{ $count: "count" }],
       },
     },
   ]);
@@ -43,21 +43,29 @@ const getListUsers = async (
   return { data: result, total };
 };
 
+const findUsers = async (query: any) => {
+  try {
+    return User.find(query);
+  } catch (err) {
+    throw err;
+  }
+};
+
 const updateUser = async (
   query: any,
-  newData: any,
+  newData: any
 ): Promise<IUserDoc | null> => {
   const user = await User.findOneAndUpdate(query, newData, {
     new: true,
   })
     .lean()
-    .select('-password -_id');
+    .select("-password -_id");
   return user;
 };
 
 const changePassword = async (
   query: any,
-  newData: any,
+  newData: any
 ): Promise<IUserDoc | null> => {
   const user = await User.findOneAndUpdate(query).lean();
   return user;
@@ -81,4 +89,5 @@ export const userRepository = {
   deleteUser,
   changePassword,
   countOfUser,
+  findUsers,
 };
