@@ -1,24 +1,24 @@
-import { NextFunction, Response } from 'express';
-import { RequestPayload } from '../@types';
-import httpStatus from 'http-status';
-import { getApiResponse } from '../utils';
+import { NextFunction, Response } from "express";
+import { RequestPayload } from "../@types";
+import httpStatus from "http-status";
+import { getApiResponse } from "../utils";
 import {
   getPayPalAccessToken,
   createPayPalOrder,
   capturePayPalOrder,
-} from '../services';
-import { ROLE, TRANSACTION_STATUS, messages } from '../constants';
+} from "../services";
+import { ROLE, TRANSACTION_STATUS, messages } from "../constants";
 import {
   bookingRepository,
   fieldRepository,
   transactionRepository,
-} from '../repositories';
-import { BOOKING_STATUS } from '../constants';
+} from "../repositories";
+import { BOOKING_STATUS } from "../constants";
 
 export const createBooking = async (
   req: RequestPayload,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     if (req.payload && req.payload.role !== ROLE.CUSTOMER) {
@@ -41,13 +41,13 @@ export const createBooking = async (
 
     const orderResponse = await createPayPalOrder({
       accessToken: paypalToken,
-      currency: 'USD',
+      currency: "USD",
       amount: totalAmount,
     });
 
     const newBooking = await bookingRepository.createBooking({
       fieldId,
-      userId: req.payload ? req.payload.id : '',
+      userId: req.payload ? req.payload.id : "",
       orderId: orderResponse.id,
       fieldPrice,
       totalAmount,
@@ -61,7 +61,7 @@ export const createBooking = async (
       getApiResponse({
         ec: 0,
         data: { orderId: orderResponse.id, id: newBooking.id },
-      }),
+      })
     );
   } catch (error) {
     next(error);
@@ -71,7 +71,7 @@ export const createBooking = async (
 export const updateBooking = async (
   req: RequestPayload,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     if (req.payload && req.payload.role !== ROLE.CUSTOMER) {
@@ -100,7 +100,7 @@ export const updateBooking = async (
 
     const bookingData = await bookingRepository.updateBooking(
       { orderId },
-      { status: bookingStatus },
+      { status: bookingStatus }
     );
 
     if (!bookingData) {
@@ -127,12 +127,12 @@ export const updateBooking = async (
 export const getListBooking = async (
   req: RequestPayload,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     if (req.payload && req.payload.role === ROLE.ADMIN) {
       const bookingList = await bookingRepository.getListBookingPagination(
-        req.query,
+        req.query
       );
       return res.status(httpStatus.OK).json(getApiResponse(bookingList));
     }
@@ -164,6 +164,7 @@ export const getListBooking = async (
       .status(httpStatus.FORBIDDEN)
       .json(getApiResponse(messages.ACCESS_DENIED));
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

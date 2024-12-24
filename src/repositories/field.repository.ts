@@ -1,4 +1,4 @@
-import { Field } from '../models/field.model';
+import { Field } from '../models';
 import { IBaseField, IFieldDoc, IFieldQuery } from '../@types';
 import { parseFilters } from '../utils';
 import { FlattenMaps, Types } from 'mongoose';
@@ -7,7 +7,6 @@ const createField = async (field: IBaseField): Promise<IFieldDoc> => {
   const newField = new Field({ ...field });
   return await newField.save();
 };
-
 const getField = async (
   value: any,
 ): Promise<
@@ -20,7 +19,6 @@ const getField = async (
   const field = await Field.findOne(value).lean();
   return field;
 };
-
 const getListFieldPagination = async (
   query: IFieldQuery & { owner?: string },
 ): Promise<{ data: IFieldDoc[]; total: number }> => {
@@ -80,7 +78,6 @@ const getListFieldPagination = async (
 
   return { data: result, total };
 };
-
 const getListField = async (query: any): Promise<IFieldDoc[]> => {
   return Field.find(query);
 };

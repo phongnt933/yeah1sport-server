@@ -1,9 +1,9 @@
-import { Schema, model } from 'mongoose';
-import { v4 as uuidv4 } from 'uuid';
+import { Schema, model } from "mongoose";
+import { v4 as uuidv4 } from "uuid";
 
-import { IUserDoc } from '../@types';
-import { ROLE, USER_STATUS } from '../constants';
-import { hashBcrypt } from '../utils';
+import { IUserDoc } from "../@types";
+import { ROLE, USER_STATUS } from "../constants";
+import { hashBcrypt } from "../utils";
 
 const UserSchema = new Schema(
   {
@@ -35,6 +35,7 @@ const UserSchema = new Schema(
       type: String,
       enum: [ROLE.ADMIN, ROLE.CUSTOMER, ROLE.FIELD_OWNER, ROLE.REFEREE],
     },
+    price: { type: Number },
     status: {
       type: String,
       enum: [USER_STATUS.LOCKED, USER_STATUS.ACTIVE],
@@ -44,13 +45,13 @@ const UserSchema = new Schema(
   {
     versionKey: false,
     timestamps: true,
-  },
+  }
 );
 
-UserSchema.pre('save', async function save(next) {
+UserSchema.pre("save", async function save(next) {
   try {
     const user = this as unknown as IUserDoc;
-    if (!user.isModified('password')) {
+    if (!user.isModified("password")) {
       next();
       return;
     }
@@ -65,4 +66,4 @@ UserSchema.pre('save', async function save(next) {
   }
 });
 
-export const User = model<IUserDoc>('user', UserSchema);
+export const User = model<IUserDoc>("user", UserSchema);

@@ -1,13 +1,16 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { IFieldDoc } from '../@types';
-import { FIELD_TYPE } from '../constants';
-import { v4 as uuidv4 } from 'uuid';
+import { IFieldDoc } from "../@types";
+import { FIELD_TYPE } from "../constants";
+import { v4 as uuidv4 } from "uuid";
 
-const EquipmentSchema = new Schema({
-  name: { type: String, required: true },
-  price: { type: Number, required: true },
-});
+const EquipmentSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    price: { type: Number, required: true },
+  },
+  { _id: false }
+);
 
 const FieldSchema = new Schema(
   {
@@ -45,14 +48,14 @@ const FieldSchema = new Schema(
     owner: {
       type: String,
       index: true,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
   },
   {
     versionKey: false,
     timestamps: true,
-  },
+  }
 );
 
-export const Field = model<IFieldDoc>('field', FieldSchema);
+export const Field = model<IFieldDoc>("field", FieldSchema);

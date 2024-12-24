@@ -1,5 +1,5 @@
-import { Document } from 'mongoose';
-import { ROLE, USER_STATUS } from '../constants';
+import { Document } from "mongoose";
+import { ROLE, USER_STATUS } from "../constants";
 
 export interface IBaseUser {
   email: string;
@@ -8,6 +8,7 @@ export interface IBaseUser {
   phone: string;
   role: ROLE;
   status: USER_STATUS;
+  price?: number;
 }
 
 export interface IUserDoc extends IBaseUser, Document {

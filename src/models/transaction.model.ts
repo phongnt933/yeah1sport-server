@@ -1,9 +1,8 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { v4 as uuidv4 } from 'uuid';
-import { PAYMENT_METHOD, TRANSACTION_STATUS } from '../constants/transaction';
-import { ITransactionDoc } from '../@types';
-import { number } from 'joi';
+import { v4 as uuidv4 } from "uuid";
+import { PAYMENT_METHOD, TRANSACTION_STATUS } from "../constants/transaction";
+import { ITransactionDoc } from "../@types";
 
 const TransactionSchema = new Schema(
   {
@@ -14,7 +13,6 @@ const TransactionSchema = new Schema(
       index: true,
       default: () => uuidv4(),
     },
-    bookingId: { type: String, index: true, ref: 'Booking', required: true },
     orderId: { type: String, required: true },
     amount: { type: Number, required: true },
     status: {
@@ -37,10 +35,10 @@ const TransactionSchema = new Schema(
   {
     versionKey: false,
     timestamps: true,
-  },
+  }
 );
 
 export const Transaction = model<ITransactionDoc>(
-  'transaction',
-  TransactionSchema,
+  "transaction",
+  TransactionSchema
 );

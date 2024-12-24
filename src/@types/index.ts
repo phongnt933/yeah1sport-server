@@ -1,3 +1,5 @@
+import e from "connect-timeout";
+
 export * from "./API-error";
 export * from "./mongo";
 export * from "./request";

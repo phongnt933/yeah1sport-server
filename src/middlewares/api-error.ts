@@ -17,7 +17,9 @@ export const errorConverter = (
   _next: NextFunction,
 ) => {
   let convertedError = err;
+  console.log(err);
   if (err instanceof ValidationError) {
+    
     convertedError = new APIError({
       ec: validationMessages.ERROR.ec,
       message: err.error,
