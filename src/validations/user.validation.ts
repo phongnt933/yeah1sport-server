@@ -1,8 +1,8 @@
-import { Joi, schema } from 'express-validation';
+import { Joi, schema } from "express-validation";
 
-import validate from './validate';
-import { ROLE, USER_STATUS } from '../constants';
-import { IBaseUser } from '../@types';
+import validate from "./validate";
+import { ROLE, USER_STATUS } from "../constants";
+import { IBaseUser } from "../@types";
 
 const createCustomer: schema = {
   body: Joi.object<IBaseUser>({
@@ -20,6 +20,7 @@ const createCMSUser: schema = {
     role: Joi.string()
       .valid(...Object.values(ROLE))
       .required(),
+    price: Joi.number(),
     phone: Joi.string().required(),
   }),
 };
